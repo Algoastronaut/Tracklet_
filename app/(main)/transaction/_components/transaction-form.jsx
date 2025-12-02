@@ -129,16 +129,15 @@ export function AddTransactionForm({
   );
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-8 [&_label]:text-slate-200"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {/* Receipt Scanner - Only show in create mode */}
       {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />}
 
       {/* Type */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Type</label>
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+          Type
+        </label>
         <Select
           onValueChange={(value) => setValue("type", value)}
           defaultValue={type}
@@ -152,14 +151,16 @@ export function AddTransactionForm({
           </SelectContent>
         </Select>
         {errors.type && (
-          <p className="text-sm text-red-500">{errors.type.message}</p>
+          <p className="text-xs text-red-400">{errors.type.message}</p>
         )}
       </div>
 
       {/* Amount and Account */}
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Amount</label>
+          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+            Amount
+          </label>
           <Input
             type="number"
             step="0.01"
@@ -167,12 +168,14 @@ export function AddTransactionForm({
             {...register("amount")}
           />
           {errors.amount && (
-            <p className="text-sm text-red-500">{errors.amount.message}</p>
+            <p className="text-xs text-red-400">{errors.amount.message}</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Account</label>
+          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+            Account
+          </label>
           <Select
             onValueChange={(value) => setValue("accountId", value)}
             defaultValue={getValues("accountId")}
@@ -197,14 +200,16 @@ export function AddTransactionForm({
             </SelectContent>
           </Select>
           {errors.accountId && (
-            <p className="text-sm text-red-500">{errors.accountId.message}</p>
+            <p className="text-xs text-red-400">{errors.accountId.message}</p>
           )}
         </div>
       </div>
 
       {/* Category */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Category</label>
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+          Category
+        </label>
         <Select
           onValueChange={(value) => setValue("category", value)}
           defaultValue={getValues("category")}
@@ -221,13 +226,15 @@ export function AddTransactionForm({
           </SelectContent>
         </Select>
         {errors.category && (
-          <p className="text-sm text-red-500">{errors.category.message}</p>
+          <p className="text-xs text-red-400">{errors.category.message}</p>
         )}
       </div>
 
       {/* Date */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Date</label>
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+          Date
+        </label>
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -254,25 +261,29 @@ export function AddTransactionForm({
           </PopoverContent>
         </Popover>
         {errors.date && (
-          <p className="text-sm text-red-500">{errors.date.message}</p>
+          <p className="text-xs text-red-400">{errors.date.message}</p>
         )}
       </div>
 
       {/* Description */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Description</label>
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+          Description
+        </label>
         <Input placeholder="Enter description" {...register("description")} />
         {errors.description && (
-          <p className="text-sm text-red-500">{errors.description.message}</p>
+          <p className="text-xs text-red-400">{errors.description.message}</p>
         )}
       </div>
 
       {/* Recurring Toggle */}
-      <div className="flex flex-row items-center justify-between rounded-lg border p-4">
+      <div className="flex flex-row items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-4">
         <div className="space-y-0.5">
-          <label className="text-base font-medium">Recurring Transaction</label>
-          <div className="text-sm text-muted-foreground">
-            Set up a recurring schedule for this transaction
+          <label className="text-sm font-semibold text-slate-800">
+            Recurring transaction
+          </label>
+          <div className="text-xs text-slate-600">
+            Turn this on for subscriptions, rent, and other repeating items.
           </div>
         </div>
         <Switch
@@ -284,7 +295,9 @@ export function AddTransactionForm({
       {/* Recurring Interval */}
       {isRecurring && (
         <div className="space-y-2">
-          <label className="text-sm font-medium">Recurring Interval</label>
+          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+            Recurring interval
+          </label>
           <Select
             onValueChange={(value) => setValue("recurringInterval", value)}
             defaultValue={getValues("recurringInterval")}
@@ -300,7 +313,7 @@ export function AddTransactionForm({
             </SelectContent>
           </Select>
           {errors.recurringInterval && (
-            <p className="text-sm text-red-500">
+            <p className="text-xs text-red-400">
               {errors.recurringInterval.message}
             </p>
           )}
@@ -308,16 +321,20 @@ export function AddTransactionForm({
       )}
 
       {/* Actions */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 pt-2">
         <Button
           type="button"
           variant="outline"
-          className="w-full"
+          className="w-full border-slate-300 text-slate-800 hover:bg-slate-100"
           onClick={() => router.back()}
         >
           Cancel
         </Button>
-        <Button type="submit" className="w-full" disabled={transactionLoading}>
+        <Button
+          type="submit"
+          className="w-full bg-violet-600 hover:bg-violet-500 text-sm font-medium"
+          disabled={transactionLoading}
+        >
           {transactionLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

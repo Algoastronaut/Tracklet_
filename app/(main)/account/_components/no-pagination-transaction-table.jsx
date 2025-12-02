@@ -175,25 +175,25 @@ export function NoPaginationTransactionTable({ transactions }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-slate-100">
       {deleteLoading && (
         <BarLoader className="mt-4" width={"100%"} color="#9333ea" />
       )}
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Search transactions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8"
+            className="pl-8 bg-slate-900/60 border-slate-700 text-slate-100 placeholder:text-slate-500"
           />
         </div>
         <div className="flex gap-2">
           <Select value={typeFilter} onValueChange={setTypeFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="All Types" />
+            <SelectTrigger className="bg-slate-900/60 border-slate-700 text-slate-100">
+              <SelectValue placeholder="All Types" className="text-slate-100" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="INCOME">Income</SelectItem>
@@ -207,8 +207,11 @@ export function NoPaginationTransactionTable({ transactions }) {
               setRecurringFilter(value);
             }}
           >
-            <SelectTrigger className="w-[130px]">
-              <SelectValue placeholder="All Transactions" />
+            <SelectTrigger className="w-[130px] bg-slate-900/60 border-slate-700 text-slate-100">
+              <SelectValue
+                placeholder="All Transactions"
+                className="text-slate-100"
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="recurring">Recurring Only</SelectItem>
@@ -236,6 +239,7 @@ export function NoPaginationTransactionTable({ transactions }) {
               size="icon"
               onClick={handleClearFilters}
               title="Clear filters"
+              className="border-slate-600 text-slate-100 hover:bg-slate-800"
             >
               <X className="h-4 w-5" />
             </Button>
@@ -244,7 +248,7 @@ export function NoPaginationTransactionTable({ transactions }) {
       </div>
 
       {/* Transactions Table */}
-      <div className="rounded-md border">
+      <div className="rounded-md border border-slate-800 bg-slate-950/60">
         <Table>
           <TableHeader>
             <TableRow>

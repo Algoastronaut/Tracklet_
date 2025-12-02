@@ -57,7 +57,7 @@ export default function SignUp() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-          <CardDescription>Join Welth to manage your finances</CardDescription>
+          <CardDescription>Join Tracklet to manage your finances</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp} className="space-y-4">

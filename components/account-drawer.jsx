@@ -224,38 +224,55 @@ export function AccountDrawer({ children, account }) {
                             />
                         </div>
 
-                    </Button>
-                </div>
-            </form>
-            {isEditMode && (
-                <div className="mt-4 pt-4 border-t">
-                    <h4 className="text-sm font-medium text-red-600 mb-2">Danger Zone</h4>
-                    <div className="bg-red-50 dark:bg-red-900/10 p-4 rounded-lg border border-red-100 dark:border-red-900/20">
-                        <div className="flex items-center justify-between">
-                            <div className="space-y-0.5">
-                                <p className="text-sm font-medium text-red-900 dark:text-red-200">Delete Account</p>
-                                <p className="text-xs text-red-600 dark:text-red-400">
-                                    Permanently remove this account and all its transactions
-                                </p>
-                            </div>
-                            <Button
-                                type="button"
-                                variant="destructive"
-                                size="sm"
-                                onClick={handleDelete}
-                                disabled={isLoading || deleteAccountLoading}
-                            >
-                                {deleteAccountLoading ? (
-                                    <Loader2 className="h-4 w-4 animate-spin" />
+                        <div className="flex gap-4 pt-4">
+                            <DrawerClose asChild>
+                                <Button type="button" variant="outline" className="flex-1">
+                                    Cancel
+                                </Button>
+                            </DrawerClose>
+                            <Button type="submit" className="flex-1" disabled={isLoading}>
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        {isEditMode ? "Updating..." : "Creating..."}
+                                    </>
+                                ) : isEditMode ? (
+                                    "Update Account"
                                 ) : (
-                                    <Trash2 className="h-4 w-4" />
+                                    "Create Account"
                                 )}
                             </Button>
                         </div>
-                    </div>
+                    </form>
+                    {isEditMode && (
+                        <div className="mt-4 pt-4 border-t">
+                            <h4 className="text-sm font-medium text-red-600 mb-2">Danger Zone</h4>
+                            <div className="bg-red-50 dark:bg-red-900/10 p-4 rounded-lg border border-red-100 dark:border-red-900/20">
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-0.5">
+                                        <p className="text-sm font-medium text-red-900 dark:text-red-200">Delete Account</p>
+                                        <p className="text-xs text-red-600 dark:text-red-400">
+                                            Permanently remove this account and all its transactions
+                                        </p>
+                                    </div>
+                                    <Button
+                                        type="button"
+                                        variant="destructive"
+                                        size="sm"
+                                        onClick={handleDelete}
+                                        disabled={isLoading || deleteAccountLoading}
+                                    >
+                                        {deleteAccountLoading ? (
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                        ) : (
+                                            <Trash2 className="h-4 w-4" />
+                                        )}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
             </DrawerContent >
         </Drawer >
     );

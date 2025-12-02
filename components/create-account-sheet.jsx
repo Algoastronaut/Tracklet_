@@ -9,13 +9,12 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-  DrawerClose,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -28,7 +27,7 @@ import { Switch } from "@/components/ui/switch";
 import { createAccount } from "@/actions/dashboard";
 import { accountSchema } from "@/app/lib/schema";
 
-export function CreateAccountDrawer({ children }) {
+export function CreateAccountSheet({ children }) {
   const [open, setOpen] = useState(false);
   const {
     register,
@@ -43,7 +42,7 @@ export function CreateAccountDrawer({ children }) {
       name: "",
       type: "CURRENT",
       balance: "",
-      isDefault: false,
+      isIncludedInBudget: true,
     },
   });
 
@@ -73,13 +72,13 @@ export function CreateAccountDrawer({ children }) {
   }, [error]);
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Create New Account</DrawerTitle>
-        </DrawerHeader>
-        <div className="px-4 pb-4">
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>{children}</SheetTrigger>
+      <SheetContent className="w-full sm:max-w-[440px]">
+        <SheetHeader>
+          <SheetTitle>Create New Account</SheetTitle>
+        </SheetHeader>
+        <div className="py-6">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
               <label
@@ -144,28 +143,31 @@ export function CreateAccountDrawer({ children }) {
             <div className="flex items-center justify-between rounded-lg border p-3">
               <div className="space-y-0.5">
                 <label
-                  htmlFor="isDefault"
+                  htmlFor="isIncludedInBudget"
                   className="text-base font-medium cursor-pointer"
                 >
-                  Set as Default
+                  Include in Budget
                 </label>
                 <p className="text-sm text-muted-foreground">
-                  This account will be selected by default for transactions
+                  This account's transactions will be included in your monthly budget
                 </p>
               </div>
               <Switch
-                id="isDefault"
-                checked={watch("isDefault")}
-                onCheckedChange={(checked) => setValue("isDefault", checked)}
+                id="isIncludedInBudget"
+                checked={watch("isIncludedInBudget")}
+                onCheckedChange={(checked) => setValue("isIncludedInBudget", checked)}
               />
             </div>
 
             <div className="flex gap-4 pt-4">
-              <DrawerClose asChild>
-                <Button type="button" variant="outline" className="flex-1">
-                  Cancel
-                </Button>
-              </DrawerClose>
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 className="flex-1"
@@ -183,7 +185,7 @@ export function CreateAccountDrawer({ children }) {
             </div>
           </form>
         </div>
-      </DrawerContent>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   );
 }

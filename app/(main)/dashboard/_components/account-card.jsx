@@ -27,21 +27,19 @@ export function AccountCard({ account }) {
     error,
   } = useFetch(updateAccount);
 
-  const handleDefaultChange = async (event) => {
-    event.preventDefault(); // Prevent navigation
-
-    await updateDefaultFn(id, { isIncludedInBudget: !isIncludedInBudget });
+  const handleDefaultChange = async (checked) => {
+    await updateDefaultFn(id, { isIncludedInBudget: checked });
   };
 
   useEffect(() => {
     if (updatedAccount?.success) {
-      toast.success("Default account updated successfully");
+      toast.success("Account budget status updated successfully");
     }
   }, [updatedAccount]);
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message || "Failed to update default account");
+      toast.error(error.message || "Failed to update account");
     }
   }, [error]);
 
@@ -55,12 +53,6 @@ export function AccountCard({ account }) {
               <CardTitle className="text-base font-semibold capitalize text-gray-900 dark:text-gray-100">
                 {name}
               </CardTitle>
-              {isDefault && (
-                <Badge className="flex items-center gap-1 bg-gradient-to-r from-violet-500 to-blue-500 text-xs text-white border-0 shadow-sm">
-                  <Star className="h-3 w-3 fill-current" />
-                  Default
-                </Badge>
-              )}
             </div>
             <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium">
               <CreditCard className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
@@ -71,19 +63,25 @@ export function AccountCard({ account }) {
             <div className="flex items-center gap-2">
               <AccountDrawer account={account}>
                 <div
-                  onClick={(e) => e.preventDefault()} // Prevent navigation
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
                   className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full cursor-pointer transition-colors"
                 >
                   <Pencil className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
                 </div>
               </AccountDrawer>
-              <div className="flex flex-col items-end">
+              <div
+                className="flex flex-col items-end"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <span className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 font-medium">
                   Budget
                 </span>
                 <Switch
                   checked={isIncludedInBudget}
-                  onClick={handleDefaultChange}
+                  onCheckedChange={handleDefaultChange}
                   disabled={updateDefaultLoading}
                   className="data-[state=checked]:bg-violet-600"
                 />

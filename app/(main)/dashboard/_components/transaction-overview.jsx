@@ -36,10 +36,14 @@ export function DashboardOverview({ accounts, transactions }) {
   const [selectedAccountId, setSelectedAccountId] = useState("all");
 
   // Filter transactions for selected account
-  const accountTransactions = transactions.filter(
-    (t) =>
-      selectedAccountId === "all" || t.accountId === selectedAccountId
-  );
+  const accountTransactions = transactions.filter((t) => {
+    if (selectedAccountId === "all") {
+      // Only include transactions from accounts that are included in the budget
+      const account = accounts.find((a) => a.id === t.accountId);
+      return account?.isIncludedInBudget;
+    }
+    return t.accountId === selectedAccountId;
+  });
 
   // Get recent transactions (last 5)
   const recentTransactions = accountTransactions

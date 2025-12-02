@@ -135,7 +135,7 @@ export function AddTransactionForm({
 
       {/* Type */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:text-gray-300">
           Type
         </label>
         <Select
@@ -158,7 +158,7 @@ export function AddTransactionForm({
       {/* Amount and Account */}
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:text-gray-300">
             Amount
           </label>
           <Input
@@ -173,7 +173,7 @@ export function AddTransactionForm({
         </div>
 
         <div className="space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:text-gray-300">
             Account
           </label>
           <Select
@@ -207,7 +207,7 @@ export function AddTransactionForm({
 
       {/* Category */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:text-gray-300">
           Category
         </label>
         <Select
@@ -232,7 +232,7 @@ export function AddTransactionForm({
 
       {/* Date */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:text-gray-300">
           Date
         </label>
         <Popover>
@@ -267,7 +267,7 @@ export function AddTransactionForm({
 
       {/* Description */}
       <div className="space-y-2">
-        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:text-gray-300">
           Description
         </label>
         <Input placeholder="Enter description" {...register("description")} />
@@ -277,12 +277,12 @@ export function AddTransactionForm({
       </div>
 
       {/* Recurring Toggle */}
-      <div className="flex flex-row items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div className="flex flex-row items-center justify-between rounded-xl border border-slate-200 bg-slate-50 dark:bg-gray-900 dark:border-gray-800 p-4">
         <div className="space-y-0.5">
-          <label className="text-sm font-semibold text-slate-800">
+          <label className="text-sm font-semibold text-slate-800 dark:text-gray-200">
             Recurring transaction
           </label>
-          <div className="text-xs text-slate-600">
+          <div className="text-xs text-slate-600 dark:text-gray-400">
             Turn this on for subscriptions, rent, and other repeating items.
           </div>
         </div>
@@ -295,7 +295,7 @@ export function AddTransactionForm({
       {/* Recurring Interval */}
       {isRecurring && (
         <div className="space-y-2">
-          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700">
+          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 dark:text-gray-300">
             Recurring interval
           </label>
           <Select
@@ -325,7 +325,7 @@ export function AddTransactionForm({
         <Button
           type="button"
           variant="outline"
-          className="w-full border-slate-300 text-slate-800 hover:bg-slate-100"
+          className="w-full border-slate-300 text-slate-800 hover:bg-slate-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
           onClick={() => router.back()}
         >
           Cancel

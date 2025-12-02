@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
+import { ThemeToggle } from "./theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -86,7 +87,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b">
+    <header className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-800">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/">
           <Image
@@ -102,12 +103,12 @@ const Header = () => {
         <div className="hidden md:flex items-center space-x-8">
           {!user && !pathname?.startsWith("/sign-in") && !pathname?.startsWith("/sign-up") && (
             <>
-              <a href="#features" className="text-gray-600 hover:text-blue-600">
+              <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
                 Features
               </a>
               <a
                 href="#testimonials"
-                className="text-gray-600 hover:text-blue-600"
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 Testimonials
               </a>
@@ -117,6 +118,7 @@ const Header = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-4">
+          <ThemeToggle />
           {user ? (
             <>
               <Link href="/dashboard">
@@ -133,11 +135,11 @@ const Header = () => {
               </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 ml-2 pl-2 border-l border-gray-200 hover:bg-gray-50 rounded-full py-1 pr-2 transition-colors">
+                  <button className="flex items-center gap-2 ml-2 pl-2 border-l border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-full py-1 pr-2 transition-colors">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-blue-500 text-xs font-semibold text-white shadow-sm">
                       {user?.name ? getInitials(user.name) : <User className="h-4 w-4" />}
                     </div>
-                    <span className="hidden sm:inline text-sm font-medium text-gray-800">
+                    <span className="hidden sm:inline text-sm font-medium text-gray-800 dark:text-gray-200">
                       {user?.name || "Your profile"}
                     </span>
                   </button>

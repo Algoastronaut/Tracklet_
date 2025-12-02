@@ -50,30 +50,30 @@ export function AccountCard({ account }) {
   }, [error]);
 
   return (
-    <Card className="group relative overflow-hidden border-slate-800/80 bg-gradient-to-br from-slate-900/90 via-slate-900 to-slate-950/90 hover:border-violet-500/80 hover:shadow-[0_18px_40px_rgba(88,28,135,0.65)] transition-all duration-300">
-      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.25),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(56,189,248,0.2),_transparent_55%)]" />
+    <Card className="group relative overflow-hidden border border-gray-200/60 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-violet-300/60 dark:hover:border-violet-600/60 hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.3)] dark:hover:shadow-[0_10px_40px_-10px_rgba(139,92,246,0.5)] transition-all duration-300 cursor-pointer">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <Link href={`/account/${id}`} className="relative block">
-        <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <CardTitle className="text-sm font-semibold capitalize text-slate-50">
+        <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-4 pt-5">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2.5">
+              <CardTitle className="text-base font-semibold capitalize text-gray-900 dark:text-gray-100">
                 {name}
               </CardTitle>
               {isDefault && (
-                <Badge className="flex items-center gap-1 bg-violet-600/90 text-xs text-white border border-violet-400/60">
+                <Badge className="flex items-center gap-1 bg-gradient-to-r from-violet-500 to-blue-500 text-xs text-white border-0 shadow-sm">
                   <Star className="h-3 w-3 fill-current" />
                   Default
                 </Badge>
               )}
             </div>
-            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-wide text-slate-400">
-              <CreditCard className="h-3 w-3 text-slate-500" />
+            <div className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 font-medium">
+              <CreditCard className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
               {type.charAt(0) + type.slice(1).toLowerCase()} Account
             </div>
           </div>
-          <div className="flex flex-col items-end gap-1">
-            <span className="text-[10px] uppercase tracking-wide text-slate-400">
-              Default for dashboard
+          <div className="flex flex-col items-end gap-1.5">
+            <span className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 font-medium">
+              Default
             </span>
             <Switch
               checked={isDefault}
@@ -83,23 +83,22 @@ export function AccountCard({ account }) {
             />
           </div>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="text-2xl font-semibold tabular-nums text-slate-50">
+        <CardContent className="space-y-3 pb-4">
+          <div className="text-3xl font-bold tabular-nums text-gray-900 dark:text-gray-100">
             ${parseFloat(balance).toFixed(2)}
           </div>
-          <p className="text-xs text-slate-400">
-            Keep an eye on this account&apos;s day‑to‑day activity and balance
-            changes.
+          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Keep an eye on this account&apos;s day‑to‑day activity and balance changes.
           </p>
         </CardContent>
-        <CardFooter className="flex justify-between pt-3 text-xs text-slate-400">
-          <div className="flex items-center gap-1.5">
-            <ArrowUpRight className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Income inflows</span>
+        <CardFooter className="flex justify-between pt-4 pb-5 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-1.5 font-medium">
+            <ArrowUpRight className="h-3.5 w-3.5 text-emerald-500" />
+            <span>Income</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <ArrowDownRight className="h-3.5 w-3.5 text-rose-400" />
-            <span>Expense outflows</span>
+          <div className="flex items-center gap-1.5 font-medium">
+            <ArrowDownRight className="h-3.5 w-3.5 text-rose-500" />
+            <span>Expenses</span>
           </div>
         </CardFooter>
       </Link>

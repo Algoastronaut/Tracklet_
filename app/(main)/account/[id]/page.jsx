@@ -21,28 +21,34 @@ export default async function AccountPage(props) {
     account.type.charAt(0) + account.type.slice(1).toLowerCase();
 
   return (
-    <div className="px-5 py-6 lg:py-10 bg-gradient-to-b from-slate-950/80 via-slate-950 to-slate-900 min-h-[calc(100vh-80px)]">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-gray-950 relative overflow-hidden pt-20 pb-16">
+      {/* Sophisticated background pattern */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-violet-100/40 dark:from-violet-900/20 via-transparent to-transparent rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-100/40 dark:from-blue-900/20 via-transparent to-transparent rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 relative z-10">
         {/* Header */}
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight gradient-title capitalize">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight capitalize mb-4 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-gray-100 dark:via-gray-200 dark:to-gray-100 bg-clip-text text-transparent">
               {account.name}
             </h1>
-            <p className="mt-2 text-sm sm:text-base text-slate-300">
-              {humanType} account overview with live balance and transaction
-              history.
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
+              {humanType} account overview with live balance and transaction history.
             </p>
           </div>
 
-          <div className="hidden sm:flex flex-col items-end gap-1 pt-1">
-            <span className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+          <div className="hidden sm:flex flex-col items-end gap-2 pt-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
               Current balance
             </span>
-            <span className="text-2xl sm:text-3xl font-semibold tabular-nums text-slate-50">
+            <span className="text-3xl sm:text-4xl font-bold tabular-nums text-gray-900 dark:text-gray-100">
               ${parseFloat(account.balance).toFixed(2)}
             </span>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
               {account._count.transactions} transaction
               {account._count.transactions === 1 ? "" : "s"}
             </span>
@@ -50,91 +56,88 @@ export default async function AccountPage(props) {
         </div>
 
         {/* Main grid */}
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] items-start">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] items-start">
           {/* Left: chart + table */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             <Suspense
               fallback={
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
-                  <BarLoader width={"100%"} color="#a855f7" />
+                <div className="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800 shadow-[0_1px_3px_0_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)] p-8">
+                  <BarLoader width={"100%"} color="#8b5cf6" />
                 </div>
               }
             >
-              <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-4 sm:p-5 backdrop-blur-xl shadow-[0_18px_40px_rgba(15,23,42,0.9)]">
+              <div className="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800 shadow-[0_1px_3px_0_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)] p-6 sm:p-8">
                 <AccountChart transactions={transactions} />
               </div>
             </Suspense>
 
             <Suspense
               fallback={
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4">
-                  <BarLoader width={"100%"} color="#a855f7" />
+                <div className="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800 shadow-[0_1px_3px_0_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)] p-8">
+                  <BarLoader width={"100%"} color="#8b5cf6" />
                 </div>
               }
             >
-              <div className="rounded-3xl border border-slate-800/80 bg-slate-950/70 p-4 sm:p-5 backdrop-blur-xl shadow-[0_18px_40px_rgba(15,23,42,0.9)]">
+              <div className="rounded-3xl bg-white dark:bg-gray-900 border border-gray-200/60 dark:border-gray-800 shadow-[0_1px_3px_0_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)] p-6 sm:p-8">
                 <TransactionTable transactions={transactions} />
               </div>
             </Suspense>
           </div>
 
           {/* Right: info panel */}
-          <div className="hidden lg:block rounded-3xl border border-slate-800/70 bg-gradient-to-br from-slate-900 via-slate-900/90 to-slate-950 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.85)] space-y-5">
+          <div className="hidden lg:block rounded-3xl bg-gradient-to-br from-violet-50/80 dark:from-violet-950/30 via-white dark:via-gray-900 to-blue-50/80 dark:to-blue-950/30 border border-gray-200/60 dark:border-gray-800 shadow-[0_1px_3px_0_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)] p-6 lg:p-8 space-y-6">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-300/80 mb-1.5">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400 mb-3">
                 Account Snapshot
               </p>
-              <p className="text-sm text-slate-200">
-                Quickly review this account&apos;s balance, activity, and how it
-                fits into your overall dashboard.
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                Quickly review this account&apos;s balance, activity, and how it fits into your overall dashboard.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-950/80 p-4 space-y-3">
+            <div className="rounded-2xl bg-white/80 dark:bg-gray-800/50 border border-gray-200/60 dark:border-gray-700 p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Balance
                 </span>
-                <span className="text-lg font-semibold tabular-nums text-slate-50">
+                <span className="text-lg font-bold tabular-nums text-gray-900 dark:text-gray-100">
                   ${parseFloat(account.balance).toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Type
                 </span>
-                <span className="text-xs px-2 py-1 rounded-full bg-slate-800 text-slate-100">
+                <span className="text-xs px-3 py-1.5 rounded-full bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300 font-bold">
                   {humanType}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-400">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                   Transactions
                 </span>
-                <span className="text-xs text-slate-200">
+                <span className="text-sm text-gray-900 dark:text-gray-100 font-bold">
                   {account._count.transactions} total
                 </span>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-950/80 p-4 space-y-2">
-              <span className="text-xs font-medium text-slate-400">
+            <div className="rounded-2xl bg-white/80 dark:bg-gray-800/50 border border-gray-200/60 dark:border-gray-700 p-6 space-y-4">
+              <span className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wider">
                 Tips for this account
               </span>
-              <ul className="space-y-1.5 text-xs text-slate-300">
-                <li className="flex gap-2">
-                  <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  Use this as your default account if it&apos;s your primary
-                  spending source.
+              <ul className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
+                <li className="flex gap-3 items-start">
+                  <span className="mt-1.5 h-2 w-2 rounded-full bg-emerald-500 flex-shrink-0 shadow-sm"></span>
+                  <span className="leading-relaxed">Use this as your default account if it&apos;s your primary spending source.</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-sky-400" />
-                  Keep descriptions meaningful so patterns stand out in charts.
+                <li className="flex gap-3 items-start">
+                  <span className="mt-1.5 h-2 w-2 rounded-full bg-blue-500 flex-shrink-0 shadow-sm"></span>
+                  <span className="leading-relaxed">Keep descriptions meaningful so patterns stand out in charts.</span>
                 </li>
-                <li className="flex gap-2">
-                  <span className="mt-[6px] h-1.5 w-1.5 rounded-full bg-violet-400" />
-                  Pair this with a monthly budget to stay in control of
-                  expenses.
+                <li className="flex gap-3 items-start">
+                  <span className="mt-1.5 h-2 w-2 rounded-full bg-violet-500 flex-shrink-0 shadow-sm"></span>
+                  <span className="leading-relaxed">Pair this with a monthly budget to stay in control of expenses.</span>
                 </li>
               </ul>
             </div>

@@ -70,20 +70,20 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
   }, [error]);
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="border border-gray-200/60 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-[0_1px_3px_0_rgb(0_0_0_/_0.1),0_1px_2px_-1px_rgb(0_0_0_/_0.1)]">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <div className="flex-1">
-          <CardTitle className="text-sm font-medium">
+          <CardTitle className="text-base font-semibold text-gray-900 dark:text-gray-100">
             Monthly Budget (Default Account)
           </CardTitle>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-3 mt-2">
             {isEditing ? (
               <div className="flex items-center gap-2">
                 <Input
                   type="number"
                   value={newBudget}
                   onChange={(e) => setNewBudget(e.target.value)}
-                  className="w-32"
+                  className="w-36 h-9 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:border-violet-500 focus:ring-violet-500"
                   placeholder="Enter amount"
                   autoFocus
                   disabled={isLoading}
@@ -93,21 +93,23 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
                   size="icon"
                   onClick={handleUpdateBudget}
                   disabled={isLoading}
+                  className="h-9 w-9 hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
                 >
-                  <Check className="h-4 w-4 text-green-500" />
+                  <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleCancel}
                   disabled={isLoading}
+                  className="h-9 w-9 hover:bg-red-50 dark:hover:bg-red-900/20"
                 >
-                  <X className="h-4 w-4 text-red-500" />
+                  <X className="h-4 w-4 text-red-600 dark:text-red-400" />
                 </Button>
               </div>
             ) : (
               <>
-                <CardDescription>
+                <CardDescription className="text-sm text-gray-600 dark:text-gray-400">
                   {activeBudget
                     ? `$${currentExpenses.toFixed(
                         2
@@ -118,9 +120,9 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsEditing(true)}
-                  className="h-6 w-6"
+                  className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
-                  <Pencil className="h-3 w-3" />
+                  <Pencil className="h-3.5 w-3.5 text-gray-600 dark:text-gray-400" />
                 </Button>
               </>
             )}
@@ -129,19 +131,18 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
       </CardHeader>
       <CardContent>
         {activeBudget && (
-          <div className="space-y-2">
+          <div className="space-y-3">
             <Progress
               value={percentUsed}
               extraStyles={`${
-                // add to Progress component
                 percentUsed >= 90
                   ? "bg-red-500"
                   : percentUsed >= 75
                     ? "bg-yellow-500"
-                    : "bg-green-500"
+                    : "bg-emerald-500"
               }`}
             />
-            <p className="text-xs text-muted-foreground text-right">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-right font-medium">
               {percentUsed.toFixed(1)}% used
             </p>
           </div>

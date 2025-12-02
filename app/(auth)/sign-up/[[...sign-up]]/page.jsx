@@ -56,56 +56,64 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 pt-20">
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 dark:from-gray-950 via-white dark:via-gray-900 to-violet-50/30 dark:to-violet-950/20 p-4 pt-20 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-violet-200/20 dark:bg-violet-900/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200/20 dark:bg-blue-900/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-violet-100/10 dark:from-violet-900/10 to-blue-100/10 dark:to-blue-900/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left side - Branding */}
-        <div className="hidden lg:block space-y-6 text-center lg:text-left">
-          <div className="space-y-4">
-            <h1 className="text-4xl lg:text-5xl font-bold text-white tracking-tight">
-              Start your journey with
-              <span className="block bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+        <div className="hidden lg:block space-y-8 text-center lg:text-left">
+          <div className="space-y-5">
+            <h1 className="text-5xl lg:text-6xl font-bold tracking-tight">
+              <span className="text-gray-900 dark:text-gray-100">Start your journey with</span>
+              <span className="block bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent mt-2">
                 Tracklet
               </span>
             </h1>
-            <p className="text-lg text-slate-300 max-w-md">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md leading-relaxed">
               Join thousands of users managing their finances smarter. Create your account and take control today.
             </p>
           </div>
-          <div className="flex flex-col gap-4 pt-4">
-            <div className="flex items-center gap-3 text-slate-300">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
-                <span className="text-white font-semibold">✓</span>
+          <div className="flex flex-col gap-5 pt-6">
+            <div className="flex items-center gap-4 text-gray-700 dark:text-gray-300">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">✓</span>
               </div>
-              <span>Free forever, no credit card required</span>
+              <span className="font-medium">Free forever, no credit card required</span>
             </div>
-            <div className="flex items-center gap-3 text-slate-300">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                <span className="text-white font-semibold">✓</span>
+            <div className="flex items-center gap-4 text-gray-700 dark:text-gray-300">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">✓</span>
               </div>
-              <span>Set up in less than 2 minutes</span>
+              <span className="font-medium">Set up in less than 2 minutes</span>
             </div>
-            <div className="flex items-center gap-3 text-slate-300">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center">
-                <span className="text-white font-semibold">✓</span>
+            <div className="flex items-center gap-4 text-gray-700 dark:text-gray-300">
+              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">✓</span>
               </div>
-              <span>Bank-level security</span>
+              <span className="font-medium">Bank-level security</span>
             </div>
           </div>
         </div>
 
         {/* Right side - Form */}
         <div className="w-full">
-          <Card className="border-slate-800/80 bg-slate-900/60 backdrop-blur-xl shadow-2xl">
-            <CardHeader className="space-y-3 text-center lg:text-left">
-              <CardTitle className="text-3xl font-bold text-white">Create Account</CardTitle>
-              <CardDescription className="text-slate-400">
+          <Card className="border border-gray-200/80 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-600 via-blue-600 to-cyan-600"></div>
+            <CardHeader className="space-y-2 pt-8 pb-6 text-center lg:text-left">
+              <CardTitle className="text-3xl font-bold text-gray-900 dark:text-gray-100">Create Account</CardTitle>
+              <CardDescription className="text-gray-500 dark:text-gray-400 text-base">
                 Join Tracklet and start managing your finances today
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pb-8">
               <form onSubmit={handleSignUp} className="space-y-5">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-200">Full Name</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Full Name</label>
                   <Input
                     type="text"
                     placeholder="John Doe"
@@ -113,12 +121,12 @@ export default function SignUp() {
                     onChange={(e) => setName(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-violet-500 h-11"
+                    className="bg-gray-50/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-violet-500 focus:ring-violet-500 h-12"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-200">Email</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Email</label>
                   <Input
                     type="email"
                     placeholder="you@example.com"
@@ -126,12 +134,12 @@ export default function SignUp() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-violet-500 h-11"
+                    className="bg-gray-50/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-violet-500 focus:ring-violet-500 h-12"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-200">Password</label>
+                  <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Password</label>
                   <Input
                     type="password"
                     placeholder="At least 8 characters"
@@ -140,13 +148,13 @@ export default function SignUp() {
                     required
                     minLength={8}
                     disabled={isLoading}
-                    className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-violet-500 h-11"
+                    className="bg-gray-50/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-violet-500 focus:ring-violet-500 h-12"
                   />
                 </div>
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-semibold h-11 mt-6" 
+                  className="w-full bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-semibold h-12 mt-6 shadow-lg hover:shadow-xl transition-all" 
                   disabled={isLoading}
                 >
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -155,8 +163,8 @@ export default function SignUp() {
               </form>
 
               <div className="mt-6 text-center text-sm">
-                <span className="text-slate-400">Already have an account? </span>
-                <Link href="/sign-in" className="text-violet-400 hover:text-violet-300 font-semibold transition-colors">
+                <span className="text-gray-500 dark:text-gray-400">Already have an account? </span>
+                <Link href="/sign-in" className="text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 font-semibold transition-colors">
                   Sign in
                 </Link>
               </div>

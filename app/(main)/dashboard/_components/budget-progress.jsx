@@ -30,8 +30,12 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
     error,
   } = useFetch(updateBudget);
 
-  const percentUsed = initialBudget
-    ? (currentExpenses / initialBudget.amount) * 100
+  // Prefer the latest budget returned from the server action,
+  // fall back to the initial budget from the server component.
+  const activeBudget = updatedBudget?.success ? updatedBudget.data : initialBudget;
+
+  const percentUsed = activeBudget
+    ? (currentExpenses / activeBudget.amount) * 100
     : 0;
 
   const handleUpdateBudget = async () => {
@@ -46,12 +50,14 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
   };
 
   const handleCancel = () => {
-    setNewBudget(initialBudget?.amount?.toString() || "");
+    setNewBudget(activeBudget?.amount?.toString() || "");
     setIsEditing(false);
   };
 
   useEffect(() => {
     if (updatedBudget?.success) {
+      // Sync input with the latest value that was saved
+      setNewBudget(updatedBudget.data.amount.toString());
       setIsEditing(false);
       toast.success("Budget updated successfully");
     }
@@ -102,10 +108,10 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
             ) : (
               <>
                 <CardDescription>
-                  {initialBudget
+                  {activeBudget
                     ? `$${currentExpenses.toFixed(
                         2
-                      )} of $${initialBudget.amount.toFixed(2)} spent`
+                      )} of $${activeBudget.amount.toFixed(2)} spent`
                     : "No budget set"}
                 </CardDescription>
                 <Button
@@ -122,7 +128,7 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
         </div>
       </CardHeader>
       <CardContent>
-        {initialBudget && (
+        {activeBudget && (
           <div className="space-y-2">
             <Progress
               value={percentUsed}

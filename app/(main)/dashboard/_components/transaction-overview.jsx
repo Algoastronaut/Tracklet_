@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   PieChart,
   Pie,
@@ -12,14 +12,10 @@ import {
 import { format } from "date-fns";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { defaultCategories } from "@/data/categories";
 import { cn } from "@/lib/utils";
 
 const COLORS = [
@@ -33,22 +29,16 @@ const COLORS = [
 ];
 
 export function DashboardOverview({ accounts, transactions }) {
-  const [selectedAccountId, setSelectedAccountId] = useState("all");
-
-  // Filter transactions for selected account
+  // Filter transactions for accounts included in the budget
   const accountTransactions = transactions.filter((t) => {
-    if (selectedAccountId === "all") {
-      // Only include transactions from accounts that are included in the budget
-      const account = accounts.find((a) => a.id === t.accountId);
-      return account?.isIncludedInBudget;
-    }
-    return t.accountId === selectedAccountId;
+    const account = accounts.find((a) => a.id === t.accountId);
+    return account?.isIncludedInBudget;
   });
 
   // Get recent transactions (last 5)
   const recentTransactions = accountTransactions
     .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 5);
+    .slice(0, 7);
 
   // Calculate expense breakdown for current month
   const currentDate = new Date();
@@ -85,24 +75,16 @@ export function DashboardOverview({ accounts, transactions }) {
       <Card className="border-gray-200/60 dark:border-gray-800 bg-white dark:bg-gray-900">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <CardTitle className="text-base font-semibold text-gray-900 dark:text-gray-100">
-            Recent Transactions
+            Recent Budget Activity
           </CardTitle>
-          <Select
-            value={selectedAccountId}
-            onValueChange={setSelectedAccountId}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground"
+            asChild
           >
-            <SelectTrigger className="w-[140px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-              <SelectValue placeholder="Select account" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Accounts</SelectItem>
-              {accounts.map((account) => (
-                <SelectItem key={account.id} value={account.id}>
-                  {account.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Link href="/transactions">View All</Link>
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -117,11 +99,11 @@ export function DashboardOverview({ accounts, transactions }) {
                   className="flex items-center justify-between"
                 >
                   <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none text-gray-900 dark:text-gray-100">
-                      {transaction.description || "Untitled Transaction"}
+                    <p className="text-sm font-medium leading-none text-gray-900 dark:text-gray-100 capitalize">
+                      {defaultCategories.find((c) => c.id === transaction.category)?.name || transaction.category}
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {format(new Date(transaction.date), "PP")}
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {transaction.description}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">

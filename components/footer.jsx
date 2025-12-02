@@ -35,14 +35,13 @@ export default function Footer() {
         <div className={`grid grid-cols-1 md:grid-cols-4 gap-8 ${isHomePage ? "mb-8" : "mb-8"}`}>
           {/* Brand */}
           <div className="space-y-4">
-            <Link href="/">
-              <Image
-                src={"/logo.png"}
-                alt="Tracklet Logo"
-                width={150}
-                height={45}
-                className="h-10 w-auto object-contain"
-              />
+            <Link href="/" className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
+                <span className="text-white font-bold text-lg">T</span>
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-blue-600 dark:from-violet-400 dark:to-blue-400 bg-clip-text text-transparent tracking-tight">
+                Tracklet
+              </span>
             </Link>
             {isHomePage && (
               <p className="text-sm text-slate-400 dark:text-gray-400 max-w-xs">

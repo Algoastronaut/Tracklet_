@@ -122,6 +122,8 @@ export async function POST(request) {
       path: "/",
     });
 
+    console.log(`/api/auth/login: set cookies tokenPresent=${!!accessToken} refreshPresent=${!!refreshToken} userId=${user.id}`);
+
     return response;
   } catch (error) {
     console.error("Login error:", error);

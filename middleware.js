@@ -44,6 +44,7 @@ const aj = arcjet({
 export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
   const token = request.cookies.get("token")?.value;
+  console.log(`Middleware: path=${pathname} tokenPresent=${!!token}`);
 
   // Verify protected routes
   if (isProtectedRoute(pathname)) {
@@ -52,9 +53,11 @@ export async function middleware(request) {
     }
 
     try {
-      verifyToken(token);
+      const decoded = verifyToken(token);
+      console.log(`Middleware: verified token for sub=${decoded.sub}`);
       return NextResponse.next();
     } catch (error) {
+      console.log("Middleware: token verify error:", error.message);
       // Token is invalid or expired
       return NextResponse.redirect(new URL("/sign-in", request.url));
     }
@@ -63,9 +66,11 @@ export async function middleware(request) {
   // Redirect authenticated users away from auth routes
   if (isAuthRoute(pathname) && token) {
     try {
-      verifyToken(token);
+      const decoded = verifyToken(token);
+      console.log(`Middleware: auth route - already authenticated sub=${decoded.sub}, redirecting to /dashboard`);
       return NextResponse.redirect(new URL("/dashboard", request.url));
     } catch (error) {
+      console.log("Middleware: auth route token invalid:", error.message);
       // Token invalid, allow access to auth routes
       return NextResponse.next();
     }

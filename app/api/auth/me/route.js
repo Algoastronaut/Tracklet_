@@ -5,6 +5,7 @@ import { verifyToken } from "@/lib/jwt";
 export async function GET(request) {
   try {
     const token = request.cookies.get("token")?.value;
+    console.log("/api/auth/me: tokenPresent=", !!token);
 
     if (!token) {
       return NextResponse.json(
@@ -18,7 +19,9 @@ export async function GET(request) {
     
     try {
       decoded = verifyToken(token);
+      console.log(`/api/auth/me: token decoded sub=${decoded.sub}`);
     } catch (error) {
+      console.log("/api/auth/me: token verify error:", error.message);
       return NextResponse.json(
         { error: "Invalid or expired token" },
         { status: 401 }

@@ -39,6 +39,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,7 +59,7 @@ import { categoryColors } from "@/data/categories";
 import { bulkDeleteTransactions } from "@/actions/account";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -64,85 +70,116 @@ const RECURRING_INTERVALS = {
   YEARLY: "Yearly",
 };
 
-export function TransactionTable({ transactions }) {
+export function TransactionTable({ transactions, totalPages, currentPage }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [selectedIds, setSelectedIds] = useState([]);
   const [sortConfig, setSortConfig] = useState({
-    field: "date",
-    direction: "desc",
+    field: searchParams.get("sort") || "date",
+    direction: searchParams.get("order") || "desc",
   });
-  const [searchTerm, setSearchTerm] = useState("");
-  const [typeFilter, setTypeFilter] = useState("");
-  const [recurringFilter, setRecurringFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const router = useRouter();
 
-  // Memoized filtered and sorted transactions
-  const filteredAndSortedTransactions = useMemo(() => {
-    let result = [...transactions];
+  const searchTerm = searchParams.get("search") || "";
+  const typeFilter = searchParams.get("type") || "";
+  const recurringFilter = searchParams.get("recurring") || "";
 
-    // Apply search filter
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
-      result = result.filter((transaction) =>
-        transaction.description?.toLowerCase().includes(searchLower)
-      );
+  const [dateRange, setDateRange] = useState({
+    from: undefined,
+    to: undefined,
+  });
+  // Date range state needs to be managed locally and synced with URL on change
+  // or parsed from URL. For simplicity, let's parse from URL if possible or keep local state that pushes to URL.
+  // Parsing complex objects from URL can be tricky. Let's try to keep it simple.
+  // We'll use local state for the inputs to avoid jitter, but sync with URL.
+
+  const handleSearch = (term) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set("search", term);
+    } else {
+      params.delete("search");
     }
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
-    // Apply type filter
-    if (typeFilter) {
-      result = result.filter((transaction) => transaction.type === typeFilter);
+  const handleTypeChange = (val) => {
+    const params = new URLSearchParams(searchParams);
+    if (val && val !== "all") {
+      params.set("type", val);
+    } else {
+      params.delete("type");
     }
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
-    // Apply recurring filter
-    if (recurringFilter) {
-      result = result.filter((transaction) => {
-        if (recurringFilter === "recurring") return transaction.isRecurring;
-        return !transaction.isRecurring;
-      });
+  const handleRecurringChange = (val) => {
+    const params = new URLSearchParams(searchParams);
+    if (val && val !== "all") {
+      params.set("recurring", val);
+    } else {
+      params.delete("recurring");
     }
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
-    // Apply sorting
-    result.sort((a, b) => {
-      let comparison = 0;
-
-      switch (sortConfig.field) {
-        case "date":
-          comparison = new Date(a.date) - new Date(b.date);
-          break;
-        case "amount":
-          comparison = a.amount - b.amount;
-          break;
-        case "category":
-          comparison = a.category.localeCompare(b.category);
-          break;
-        default:
-          comparison = 0;
+  const handleDateChange = (range) => {
+    const params = new URLSearchParams(searchParams);
+    if (range?.from) {
+      params.set("from", format(range.from, "yyyy-MM-dd"));
+      if (range?.to) {
+        params.set("to", format(range.to, "yyyy-MM-dd"));
+      } else {
+        params.delete("to");
       }
-
-      return sortConfig.direction === "asc" ? comparison : -comparison;
-    });
-
-    return result;
-  }, [transactions, searchTerm, typeFilter, recurringFilter, sortConfig]);
-
-  // Pagination calculations
-  const totalPages = Math.ceil(
-    filteredAndSortedTransactions.length / ITEMS_PER_PAGE
-  );
-  const paginatedTransactions = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredAndSortedTransactions.slice(
-      startIndex,
-      startIndex + ITEMS_PER_PAGE
-    );
-  }, [filteredAndSortedTransactions, currentPage]);
+    } else {
+      params.delete("from");
+      params.delete("to");
+    }
+    params.set("page", "1");
+    router.replace(`${pathname}?${params.toString()}`);
+  };
 
   const handleSort = (field) => {
-    setSortConfig((current) => ({
-      field,
-      direction:
-        current.field === field && current.direction === "asc" ? "desc" : "asc",
-    }));
+    const direction =
+      sortConfig.field === field && sortConfig.direction === "asc" ? "desc" : "asc";
+    setSortConfig({ field, direction });
+
+    const params = new URLSearchParams(searchParams);
+    params.set("sort", field);
+    params.set("order", direction);
+    router.replace(`${pathname}?${params.toString()}`);
+  };
+
+  // Initialize dateRange from URL params
+  useEffect(() => {
+    const from = searchParams.get("from");
+    const to = searchParams.get("to");
+    if (from || to) {
+      setDateRange({
+        from: from ? new Date(from) : undefined,
+        to: to ? new Date(to) : undefined,
+      });
+    } else {
+      setDateRange({ from: undefined, to: undefined });
+    }
+  }, [searchParams]);
+
+  const handlePageChange = (newPage) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newPage.toString());
+    router.replace(`${pathname}?${params.toString()}`);
+    setSelectedIds([]);
+  };
+
+  const handleClearFilters = () => {
+    const params = new URLSearchParams();
+    router.replace(`${pathname}?${params.toString()}`);
+    setSelectedIds([]);
   };
 
   const handleSelect = (id) => {
@@ -155,9 +192,9 @@ export function TransactionTable({ transactions }) {
 
   const handleSelectAll = () => {
     setSelectedIds((current) =>
-      current.length === paginatedTransactions.length
+      current.length === transactions.length
         ? []
-        : paginatedTransactions.map((t) => t.id)
+        : transactions.map((t) => t.id)
     );
   };
 
@@ -184,18 +221,6 @@ export function TransactionTable({ transactions }) {
     }
   }, [deleted, deleteLoading]);
 
-  const handleClearFilters = () => {
-    setSearchTerm("");
-    setTypeFilter("");
-    setRecurringFilter("");
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-    setSelectedIds([]); // Clear selections on page change
-  };
-
   return (
     <div className="space-y-4 text-gray-900 dark:text-gray-100">
       {deleteLoading && (
@@ -208,25 +233,20 @@ export function TransactionTable({ transactions }) {
           <Input
             placeholder="Search transactions..."
             value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
+            onChange={(e) => handleSearch(e.target.value)}
             className="pl-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
           />
         </div>
         <div className="flex gap-2">
           <Select
             value={typeFilter}
-            onValueChange={(value) => {
-              setTypeFilter(value);
-              setCurrentPage(1);
-            }}
+            onValueChange={handleTypeChange}
           >
             <SelectTrigger className="w-[130px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
               <SelectValue placeholder="All Types" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
               <SelectItem value="INCOME">Income</SelectItem>
               <SelectItem value="EXPENSE">Expense</SelectItem>
             </SelectContent>
@@ -234,19 +254,54 @@ export function TransactionTable({ transactions }) {
 
           <Select
             value={recurringFilter}
-            onValueChange={(value) => {
-              setRecurringFilter(value);
-              setCurrentPage(1);
-            }}
+            onValueChange={handleRecurringChange}
           >
             <SelectTrigger className="w-[130px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
               <SelectValue placeholder="All Transactions" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All Transactions</SelectItem>
               <SelectItem value="recurring">Recurring Only</SelectItem>
               <SelectItem value="non-recurring">Non-recurring Only</SelectItem>
             </SelectContent>
           </Select>
+
+          {/* Date Filter */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-[240px] justify-start text-left font-normal bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100",
+                  !dateRange && "text-muted-foreground"
+                )}
+              >
+                <Clock className="mr-2 h-4 w-4" />
+                {dateRange?.from ? (
+                  dateRange.to ? (
+                    <>
+                      {format(dateRange.from, "LLL dd, y")} -{" "}
+                      {format(dateRange.to, "LLL dd, y")}
+                    </>
+                  ) : (
+                    format(dateRange.from, "LLL dd, y")
+                  )
+                ) : (
+                  <span>Pick a date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={dateRange?.from}
+                selected={dateRange}
+                onSelect={handleDateChange}
+                numberOfMonths={2}
+              />
+            </PopoverContent>
+          </Popover>
 
           {/* Bulk Actions */}
           {selectedIds.length > 0 && (
@@ -262,7 +317,7 @@ export function TransactionTable({ transactions }) {
             </div>
           )}
 
-          {(searchTerm || typeFilter || recurringFilter) && (
+          {(searchTerm || typeFilter || recurringFilter || dateRange) && (
             <Button
               variant="outline"
               size="icon"
@@ -284,8 +339,8 @@ export function TransactionTable({ transactions }) {
               <TableHead className="w-[50px]">
                 <Checkbox
                   checked={
-                    selectedIds.length === paginatedTransactions.length &&
-                    paginatedTransactions.length > 0
+                    selectedIds.length === transactions.length &&
+                    transactions.length > 0
                   }
                   onCheckedChange={handleSelectAll}
                 />
@@ -338,7 +393,7 @@ export function TransactionTable({ transactions }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedTransactions.length === 0 ? (
+            {transactions.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={7}
@@ -348,7 +403,7 @@ export function TransactionTable({ transactions }) {
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedTransactions.map((transaction) => (
+              transactions.map((transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell>
                     <Checkbox
@@ -393,7 +448,7 @@ export function TransactionTable({ transactions }) {
                               <RefreshCw className="h-3 w-3" />
                               {
                                 RECURRING_INTERVALS[
-                                  transaction.recurringInterval
+                                transaction.recurringInterval
                                 ]
                               }
                             </Badge>

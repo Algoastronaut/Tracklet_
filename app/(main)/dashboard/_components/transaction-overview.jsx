@@ -77,14 +77,6 @@ export function DashboardOverview({ accounts, transactions }) {
           <CardTitle className="text-base font-semibold text-gray-900 dark:text-gray-100">
             Recent Budget Activity
           </CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-foreground"
-            asChild
-          >
-            <Link href="/transactions">View All</Link>
-          </Button>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -93,38 +85,48 @@ export function DashboardOverview({ accounts, transactions }) {
                 No recent transactions
               </p>
             ) : (
-              recentTransactions.map((transaction) => (
-                <div
-                  key={transaction.id}
-                  className="flex items-center justify-between"
-                >
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none text-gray-900 dark:text-gray-100 capitalize">
-                      {defaultCategories.find((c) => c.id === transaction.category)?.name || transaction.category}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {transaction.description}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={cn(
-                        "flex items-center",
-                        transaction.type === "EXPENSE"
-                          ? "text-red-500"
-                          : "text-green-500"
-                      )}
-                    >
-                      {transaction.type === "EXPENSE" ? (
-                        <ArrowDownRight className="mr-1 h-4 w-4" />
-                      ) : (
-                        <ArrowUpRight className="mr-1 h-4 w-4" />
-                      )}
-                      ${transaction.amount.toFixed(2)}
+              <>
+                {recentTransactions.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-none text-gray-900 dark:text-gray-100 capitalize">
+                        {defaultCategories.find((c) => c.id === transaction.category)?.name || transaction.category}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {transaction.description}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={cn(
+                          "flex items-center",
+                          transaction.type === "EXPENSE"
+                            ? "text-red-500"
+                            : "text-green-500"
+                        )}
+                      >
+                        {transaction.type === "EXPENSE" ? (
+                          <ArrowDownRight className="mr-1 h-4 w-4" />
+                        ) : (
+                          <ArrowUpRight className="mr-1 h-4 w-4" />
+                        )}
+                        ${transaction.amount.toFixed(2)}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                ))}
+
+                <Button
+                  variant="outline"
+                  className="w-full mt-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  asChild
+                >
+                  <Link href="/transactions">View All Activity</Link>
+                </Button>
+              </>
             )}
           </div>
         </CardContent>
@@ -177,6 +179,6 @@ export function DashboardOverview({ accounts, transactions }) {
           )}
         </CardContent>
       </Card>
-    </div>
+    </div >
   );
 }

@@ -23,7 +23,7 @@ export default async function DashboardPage() {
     const budgetData = await getCurrentBudget();
 
     return (
-      <div className="space-y-8">
+      <div className="space-y-16">
         {/* Budget Progress */}
         <BudgetProgress
           initialBudget={budgetData?.budget}

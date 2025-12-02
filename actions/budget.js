@@ -4,7 +4,7 @@ import { db } from "@/lib/prisma";
 import { getUserIdFromToken } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
-export async function getCurrentBudget(accountId) {
+export async function getCurrentBudget(accountId = null) {
   try {
     const userId = await getUserIdFromToken();
 
@@ -43,7 +43,9 @@ export async function getCurrentBudget(accountId) {
           gte: startOfMonth,
           lte: endOfMonth,
         },
-        accountId,
+        account: {
+          isIncludedInBudget: true,
+        },
       },
       _sum: {
         amount: true,

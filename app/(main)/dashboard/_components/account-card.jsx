@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, ArrowDownRight, CreditCard, Star } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight, CreditCard, Star, Pencil } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useEffect } from "react";
@@ -13,28 +13,24 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { updateDefaultAccount } from "@/actions/account";
+import { updateAccount } from "@/actions/account";
 import { toast } from "sonner";
+import { AccountDrawer } from "@/components/account-drawer";
 
 export function AccountCard({ account }) {
-  const { name, type, balance, id, isDefault } = account;
+  const { name, type, balance, id, isIncludedInBudget } = account;
 
   const {
     loading: updateDefaultLoading,
     fn: updateDefaultFn,
     data: updatedAccount,
     error,
-  } = useFetch(updateDefaultAccount);
+  } = useFetch(updateAccount);
 
   const handleDefaultChange = async (event) => {
     event.preventDefault(); // Prevent navigation
 
-    if (isDefault) {
-      toast.warning("You need at least 1 default account");
-      return; // Don't allow toggling off the default account
-    }
-
-    await updateDefaultFn(id);
+    await updateDefaultFn(id, { isIncludedInBudget: !isIncludedInBudget });
   };
 
   useEffect(() => {
@@ -72,15 +68,27 @@ export function AccountCard({ account }) {
             </div>
           </div>
           <div className="flex flex-col items-end gap-1.5">
-            <span className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 font-medium">
-              Default
-            </span>
-            <Switch
-              checked={isDefault}
-              onClick={handleDefaultChange}
-              disabled={updateDefaultLoading}
-              className="data-[state=checked]:bg-violet-600"
-            />
+            <div className="flex items-center gap-2">
+              <AccountDrawer account={account}>
+                <div
+                  onClick={(e) => e.preventDefault()} // Prevent navigation
+                  className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full cursor-pointer transition-colors"
+                >
+                  <Pencil className="h-3.5 w-3.5 text-gray-500 dark:text-gray-400" />
+                </div>
+              </AccountDrawer>
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 font-medium">
+                  Budget
+                </span>
+                <Switch
+                  checked={isIncludedInBudget}
+                  onClick={handleDefaultChange}
+                  disabled={updateDefaultLoading}
+                  className="data-[state=checked]:bg-violet-600"
+                />
+              </div>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3 pb-4">

@@ -83,22 +83,15 @@ export async function createAccount(data) {
       where: { userId: user.id },
     });
 
-    const shouldBeDefault =
-      existingAccounts.length === 0 ? true : data.isDefault;
-
-    if (shouldBeDefault) {
-      await db.account.updateMany({
-        where: { userId: user.id, isDefault: true },
-        data: { isDefault: false },
-      });
-    }
+    const shouldBeIncluded =
+      existingAccounts.length === 0 ? true : data.isIncludedInBudget;
 
     const account = await db.account.create({
       data: {
         ...data,
         balance: balanceFloat,
         userId: user.id,
-        isDefault: shouldBeDefault,
+        isIncludedInBudget: shouldBeIncluded,
       },
     });
 

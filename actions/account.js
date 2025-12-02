@@ -145,3 +145,45 @@ export async function updateDefaultAccount(accountId) {
     return { success: false, error: error.message };
   }
 }
+
+export async function updateAccount(id, data) {
+  try {
+    const userId = await getUserIdFromToken();
+
+    const user = await db.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const balanceFloat = parseFloat(data.balance);
+    if (isNaN(balanceFloat)) {
+      throw new Error("Invalid balance amount");
+    }
+
+    // Check if isIncludedInBudget is being updated
+    if (data.isIncludedInBudget !== undefined) {
+      // No need to unset other accounts, as multiple accounts can be included in budget
+    }
+
+    const account = await db.account.update({
+      where: {
+        id,
+        userId: user.id,
+      },
+      data: {
+        ...data,
+        balance: balanceFloat,
+        isIncludedInBudget: data.isIncludedInBudget,
+      },
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath(`/account/${id}`);
+    return { success: true, data: serializeDecimal(account) };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}

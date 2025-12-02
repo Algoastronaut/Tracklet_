@@ -7,7 +7,8 @@ import { AccountChart } from "../_components/account-chart";
 
 export const dynamic = "force-dynamic";
 
-export default async function AccountPage({ params }) {
+export default async function AccountPage(props) {
+  const params = await props.params;
   const accountData = await getAccountWithTransactions(params.id);
 
   if (!accountData) {

@@ -391,7 +391,7 @@ export function TransactionTable({ transactions }) {
                           <TooltipTrigger>
                             <Badge
                               variant="secondary"
-                              className="gap-1 bg-purple-100 text-purple-700 hover:bg-purple-200"
+                              className="gap-1 bg-violet-500/20 text-violet-200 border border-violet-400 hover:bg-violet-500/30"
                             >
                               <RefreshCw className="h-3 w-3" />
                               {
@@ -415,7 +415,10 @@ export function TransactionTable({ transactions }) {
                         </Tooltip>
                       </TooltipProvider>
                     ) : (
-                      <Badge variant="outline" className="gap-1">
+                      <Badge
+                        variant="outline"
+                        className="gap-1 border-slate-600 text-slate-100 bg-slate-900/60"
+                      >
                         <Clock className="h-3 w-3" />
                         One-time
                       </Badge>

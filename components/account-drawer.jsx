@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import useFetch from "@/hooks/use-fetch";
 import { toast } from "sonner";
 
@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { createAccount } from "@/actions/dashboard";
-import { updateAccount } from "@/actions/account";
+import { updateAccount, deleteAccount } from "@/actions/account";
 import { accountSchema } from "@/app/lib/schema";
 
 export function AccountDrawer({ children, account }) {
@@ -46,7 +46,6 @@ export function AccountDrawer({ children, account }) {
             name: account?.name || "",
             type: account?.type || "CURRENT",
             balance: account?.balance?.toString() || "",
-            isDefault: account?.isDefault || false,
             isIncludedInBudget: account?.isIncludedInBudget ?? true,
         },
     });
@@ -66,6 +65,33 @@ export function AccountDrawer({ children, account }) {
         error: updateError,
         data: updatedAccount,
     } = useFetch(updateAccount);
+
+    // Delete Account Action
+    const {
+        loading: deleteAccountLoading,
+        fn: deleteAccountFn,
+        error: deleteError,
+        data: deletedAccount,
+    } = useFetch(deleteAccount);
+
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this account? This action cannot be undone.")) {
+            await deleteAccountFn(account.id);
+        }
+    };
+
+    useEffect(() => {
+        if (deletedAccount?.success) {
+            toast.success("Account deleted successfully");
+            setOpen(false);
+        }
+    }, [deletedAccount]);
+
+    useEffect(() => {
+        if (deleteError) {
+            toast.error(deleteError.message || "Failed to delete account");
+        }
+    }, [deleteError]);
 
     const onSubmit = async (data) => {
         if (isEditMode) {
@@ -103,7 +129,7 @@ export function AccountDrawer({ children, account }) {
                 name: account?.name || "",
                 type: account?.type || "CURRENT",
                 balance: account?.balance?.toString() || "",
-                isDefault: account?.isDefault || false,
+                isIncludedInBudget: account?.isIncludedInBudget ?? true,
             });
         }
     }, [open, account, reset]);
@@ -198,28 +224,39 @@ export function AccountDrawer({ children, account }) {
                             />
                         </div>
 
-                        <div className="flex gap-4 pt-4">
-                            <DrawerClose asChild>
-                                <Button type="button" variant="outline" className="flex-1">
-                                    Cancel
-                                </Button>
-                            </DrawerClose>
-                            <Button type="submit" className="flex-1" disabled={isLoading}>
-                                {isLoading ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        {isEditMode ? "Updating..." : "Creating..."}
-                                    </>
-                                ) : isEditMode ? (
-                                    "Update Account"
+                    </Button>
+                </div>
+            </form>
+            {isEditMode && (
+                <div className="mt-4 pt-4 border-t">
+                    <h4 className="text-sm font-medium text-red-600 mb-2">Danger Zone</h4>
+                    <div className="bg-red-50 dark:bg-red-900/10 p-4 rounded-lg border border-red-100 dark:border-red-900/20">
+                        <div className="flex items-center justify-between">
+                            <div className="space-y-0.5">
+                                <p className="text-sm font-medium text-red-900 dark:text-red-200">Delete Account</p>
+                                <p className="text-xs text-red-600 dark:text-red-400">
+                                    Permanently remove this account and all its transactions
+                                </p>
+                            </div>
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                size="sm"
+                                onClick={handleDelete}
+                                disabled={isLoading || deleteAccountLoading}
+                            >
+                                {deleteAccountLoading ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
                                 ) : (
-                                    "Create Account"
+                                    <Trash2 className="h-4 w-4" />
                                 )}
                             </Button>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </DrawerContent>
-        </Drawer>
+            )}
+        </div>
+            </DrawerContent >
+        </Drawer >
     );
 }

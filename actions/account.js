@@ -123,14 +123,18 @@ export async function updateAccount(id, data) {
       throw new Error("User not found");
     }
 
-    const balanceFloat = parseFloat(data.balance);
-    if (isNaN(balanceFloat)) {
-      throw new Error("Invalid balance amount");
-    }
+    const updateData = {
+      ...data,
+      isIncludedInBudget: data.isIncludedInBudget,
+    };
 
-    // Check if isIncludedInBudget is being updated
-    if (data.isIncludedInBudget !== undefined) {
-      // No need to unset other accounts, as multiple accounts can be included in budget
+    // Only update balance if it's provided
+    if (data.balance) {
+      const balanceFloat = parseFloat(data.balance);
+      if (isNaN(balanceFloat)) {
+        throw new Error("Invalid balance amount");
+      }
+      updateData.balance = balanceFloat;
     }
 
     const account = await db.account.update({
@@ -138,16 +142,50 @@ export async function updateAccount(id, data) {
         id,
         userId: user.id,
       },
-      data: {
-        ...data,
-        balance: balanceFloat,
-        isIncludedInBudget: data.isIncludedInBudget,
-      },
+      data: updateData,
     });
 
     revalidatePath("/dashboard");
     revalidatePath(`/account/${id}`);
     return { success: true, data: serializeDecimal(account) };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function deleteAccount(id) {
+  try {
+    const userId = await getUserIdFromToken();
+
+    const user = await db.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Check if account exists and belongs to user
+    const account = await db.account.findUnique({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
+
+    if (!account) {
+      throw new Error("Account not found");
+    }
+
+    // Delete account (transactions will be cascaded due to schema)
+    await db.account.delete({
+      where: {
+        id,
+      },
+    });
+
+    revalidatePath("/dashboard");
+    return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
   }

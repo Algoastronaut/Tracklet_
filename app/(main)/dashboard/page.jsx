@@ -1,4 +1,6 @@
 import { getUserAccounts } from "@/actions/dashboard";
+
+export const dynamic = "force-dynamic";
 import { getDashboardData } from "@/actions/dashboard";
 import { getCurrentBudget } from "@/actions/budget";
 import { AccountCard } from "./_components/account-card";
@@ -15,7 +17,7 @@ export default async function DashboardPage() {
       getDashboardData(),
     ]);
 
-    const defaultAccount = accounts?.find((account) => account.isDefault);
+
 
     // Get budget for default account
     const budgetData = await getCurrentBudget();

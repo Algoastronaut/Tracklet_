@@ -59,8 +59,14 @@ module.exports = {
 				shimmer: "shimmer 8s infinite",
 				marquee: "marquee var(--duration) linear infinite",
 				"marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+				"border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
 			},
 			keyframes: {
+				"border-beam": {
+					"100%": {
+						"offset-distance": "100%",
+					},
+				},
 				shimmer: {
 					"0%, 90%, 100%": {
 						"background-position": "calc(-100% - var(--shimmer-width)) 0",

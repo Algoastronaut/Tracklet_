@@ -170,6 +170,10 @@ export function DashboardOverview({ accounts, transactions }) {
                       backgroundColor: "hsl(var(--popover))",
                       border: "1px solid hsl(var(--border))",
                       borderRadius: "var(--radius)",
+                      color: "hsl(var(--popover-foreground))",
+                    }}
+                    itemStyle={{
+                      color: "hsl(var(--popover-foreground))",
                     }}
                   />
                   <Legend />

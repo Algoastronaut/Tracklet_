@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 const HeroSection = () => {
   const imageRef = useRef(null);
@@ -61,16 +62,18 @@ const HeroSection = () => {
             </Link>
           </div>
         )}
-        <div className="hero-image-wrapper mt-5 md:mt-0">
-          <div ref={imageRef} className="hero-image">
+        <div className="hero-image-wrapper mt-5 md:mt-0 relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+          <div ref={imageRef} className="hero-image relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-2xl">
             <Image
               src="/banner.jpeg"
               width={1280}
               height={720}
               alt="Dashboard Preview"
-              className="rounded-lg shadow-[0_0_40px_rgba(139,92,246,0.3)] border border-gray-200 dark:border-gray-800 mx-auto"
+              className="rounded-lg mx-auto"
               priority
             />
+            <BorderBeam size={250} duration={12} delay={9} />
           </div>
         </div>
       </div>

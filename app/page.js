@@ -85,7 +85,9 @@ const LandingPage = () => {
                     {feature.icon}
                   </div>
                 }
-                className={index === 3 || index === 6 ? "md:col-span-2" : ""}
+                className={
+                  index === 3 ? "md:col-span-2" : index === 5 ? "md:col-span-3" : ""
+                }
               />
             ))}
           </BentoGrid>

@@ -122,3 +122,73 @@ export async function getDashboardData() {
 
   return transactions.map(serializeTransaction);
 }
+
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+export async function generateDashboardInsights() {
+  const userId = await getUserIdFromToken();
+
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    include: { accounts: true },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Fetch recent transactions
+  const transactions = await db.transaction.findMany({
+    where: { userId: user.id },
+    orderBy: { date: "desc" },
+    take: 20, // Analyze last 20 transactions
+  });
+
+  // Calculate some basic stats to feed the AI
+  const totalExpenses = transactions
+    .filter((t) => t.type === "EXPENSE")
+    .reduce((acc, t) => acc + t.amount.toNumber(), 0);
+
+  const totalIncome = transactions
+    .filter((t) => t.type === "INCOME")
+    .reduce((acc, t) => acc + t.amount.toNumber(), 0);
+
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  console.log("GEMINI_API_KEY Status:", process.env.GEMINI_API_KEY ? "Present" : "Missing");
+  const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+
+  const prompt = `
+    Analyze this financial data for a user and provide 3 concise, actionable, and friendly insights/recommendations.
+    Focus on spending habits, savings opportunities, or budget adherence.
+    Do not mention specific dates or transaction IDs.
+    
+    Financial Data:
+    - Total Recent Expenses: $${totalExpenses}
+    - Total Recent Income: $${totalIncome}
+    - Recent Transactions: ${transactions
+      .map(
+        (t) =>
+          `${t.date.toISOString().split("T")[0]}: ${t.description} ($${t.amount})`
+      )
+      .join(", ")}
+      
+    Format the response as a JSON array of strings, like this:
+    ["Insight 1", "Insight 2", "Insight 3"]
+  `;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text();
+    const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+
+    return JSON.parse(cleanedText);
+  } catch (error) {
+    console.error("Error generating insights:", error);
+    return [
+      "Error: Failed to generate insights. Please try again later.",
+      `Details: ${error.message}`,
+      "Ensure your GEMINI_API_KEY is correctly configured.",
+    ];
+  }
+}

@@ -9,6 +9,7 @@ import { BudgetProgress } from "./_components/budget-progress";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import { DashboardOverview } from "./_components/transaction-overview";
+import { DashboardInsights } from "./_components/dashboard-insights";
 
 export default async function DashboardPage() {
   try {
@@ -31,6 +32,12 @@ export default async function DashboardPage() {
         />
 
         {/* Dashboard Overview */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="md:col-span-2 lg:col-span-3">
+            <DashboardInsights />
+          </div>
+        </div>
+
         <DashboardOverview
           accounts={accounts}
           transactions={transactions || []}

@@ -149,7 +149,7 @@ export function CreateAccountSheet({ children }) {
                   Include in Budget
                 </label>
                 <p className="text-sm text-muted-foreground">
-                  This account's transactions will be included in your monthly budget
+                  This account&apos;s transactions will be included in your monthly budget
                 </p>
               </div>
               <Switch

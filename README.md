@@ -3,27 +3,28 @@
 
 **Smart Financial Tracking Made Simple**
 
-A modern, JWT-authenticated financial management platform built with Next.js, React, and Prisma.
+A modern, JWT-authenticated financial management platform built with Next.js, React, and Prisma. Now featuring AI-powered insights! 🚀
 
 ## Features
 
-- 🔐 **Secure JWT Authentication** - No third-party auth required
+- 🔐 **Secure JWT Authentication** - Custom implementation with access/refresh tokens
 - 💰 **Account Management** - Track multiple bank accounts
 - 📊 **Transaction Tracking** - Categorize and analyze your spending
 - 📈 **Budget Management** - Set and monitor budget goals
-- 🤖 **AI-Powered Receipt Scanning** - Auto-extract transaction details from receipts
+- 🤖 **AI-Powered Insights** - Personalized financial advice using Google Gemini
+- 🧾 **Receipt Scanning** - Auto-extract details from receipts using AI
 - 📧 **Email Notifications** - Get alerts for budget milestones
 - 🌙 **Dark Mode Support** - Eye-friendly interface
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TailwindCSS
+- **Frontend**: Next.js 15, React 19, TailwindCSS, Recharts
 - **Backend**: Next.js API Routes, Server Actions
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: JWT with bcryptjs password hashing
-- **Email**: Resend for transactional emails
-- **AI**: Google Generative AI for receipt scanning
-- **Security**: Arcjet rate limiting and DDoS protection
+- **Authentication**: Custom JWT (bcryptjs hashing, httpOnly cookies)
+- **AI**: Google Gemini 1.5 Flash
+- **Email**: Resend
+- **Security**: Arcjet (Rate limiting, Bot protection)
 
 ## Getting Started
 
@@ -31,7 +32,6 @@ A modern, JWT-authenticated financial management platform built with Next.js, Re
 
 - Node.js 18+
 - PostgreSQL database (Neon, Supabase, or local)
-- npm or yarn
 
 ### Installation
 
@@ -52,14 +52,13 @@ A modern, JWT-authenticated financial management platform built with Next.js, Re
    ```
    
    Update `.env` with your values:
-   ```
-   DATABASE_URL=your_neon_or_postgres_url
-   DIRECT_URL=your_neon_or_postgres_url
-   JWT_SECRET=your_random_secret_key
-   JWT_REFRESH_SECRET=your_random_refresh_secret
-   GEMINI_API_KEY=your_google_gemini_key
-   RESEND_API_KEY=your_resend_api_key
-   ARCJET_KEY=your_arcjet_key
+   ```env
+   DATABASE_URL="postgresql://..."
+   JWT_SECRET="your-secret-key-min-32-chars"
+   JWT_REFRESH_SECRET="your-refresh-secret-min-32-chars"
+   GEMINI_API_KEY="your-google-gemini-key"
+   RESEND_API_KEY="your-resend-api-key"
+   ARCJET_KEY="your-arcjet-key"
    ```
 
 4. **Run database migrations**
@@ -74,41 +73,40 @@ A modern, JWT-authenticated financial management platform built with Next.js, Re
    
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## API Endpoints
+## Authentication System
 
-### Authentication
-- `POST /api/auth/register` - Create new account
-- `POST /api/auth/login` - Login with email/password
-- `POST /api/auth/logout` - Logout and clear tokens
-- `POST /api/auth/refresh` - Refresh access token
-- `GET /api/auth/me` - Get current user
+We moved from Clerk to a custom JWT solution for full control and privacy.
 
-## Security Features
+- **Register**: `POST /api/auth/register` (Hashes password with bcrypt)
+- **Login**: `POST /api/auth/login` (Returns httpOnly cookies)
+- **Logout**: `POST /api/auth/logout` (Clears cookies)
+- **Security**: 
+  - Access Token (7 days)
+  - Refresh Token (30 days)
+  - Rate limiting (5 attempts/15 mins)
 
-- ✅ HTTPOnly secure cookies for token storage
-- ✅ Password hashing with bcryptjs (10 rounds)
-- ✅ Rate limiting on login (5 attempts, 15-min lockout)
-- ✅ JWT token expiration (7 days access, 30 days refresh)
-- ✅ CSRF protection with SameSite cookies
-- ✅ Dynamic route protection with middleware
+## AI Features
+
+- **Dashboard Insights**: Click "Generate Insights" on the dashboard to get personalized advice based on your recent spending.
+- **Receipt Scanner**: Upload a receipt image to automatically extract date, amount, and merchant.
 
 ## Project Structure
 
 ```
 ├── app/
-│   ├── (auth)/           # Authentication pages
-│   ├── (main)/           # Protected routes
+│   ├── (auth)/           # Sign-in/Sign-up pages
+│   ├── (main)/           # Protected dashboard routes
 │   ├── api/              # API endpoints
 │   └── layout.js         # Root layout
-├── actions/              # Server actions
-├── components/           # Reusable components
+├── actions/              # Server actions (Dashboard, Transactions)
+├── components/           # Reusable UI components
 ├── lib/
-│   ├── jwt.js           # JWT utilities
-│   ├── password.js      # Password hashing
-│   └── auth.js          # Auth helpers
+│   ├── jwt.js           # Token utilities
+│   ├── password.js      # Hashing utilities
+│   └── prisma.js        # DB client
 ├── prisma/
 │   └── schema.prisma    # Database schema
-└── middleware.js        # JWT verification middleware
+└── middleware.js        # Route protection
 ```
 
 ## Contributing
@@ -118,7 +116,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 MIT License - feel free to use this project for personal or commercial purposes.
-
-## Support
-
-If you encounter any issues, please open an issue on GitHub.

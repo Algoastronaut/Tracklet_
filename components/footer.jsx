@@ -36,20 +36,27 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/logo-light.png"
-                alt="Tracklet Logo"
-                width={160}
-                height={60}
-                className="h-10 w-auto object-contain block dark:hidden"
-              />
-              <Image
-                src="/logo-dark.png"
-                alt="Tracklet Logo"
-                width={160}
-                height={60}
-                className="h-10 w-auto object-contain hidden dark:block"
-              />
+              <div className="flex flex-col items-center justify-center">
+                {/* Bar Chart Icon */}
+                <div className="relative">
+                  <div className="relative bg-white dark:bg-gray-950 rounded-lg p-1 border border-violet-100 dark:border-violet-900/50">
+                    <div className="flex items-end gap-0.5 h-5 w-5">
+                      <div className="w-1 bg-violet-500 dark:bg-violet-400 h-1.5 rounded-t-sm"></div>
+                      <div className="w-1 bg-violet-600 dark:bg-violet-500 h-2.5 rounded-t-sm"></div>
+                      <div className="w-1 bg-indigo-600 dark:bg-indigo-500 h-4 rounded-t-sm"></div>
+                      <div className="w-1 bg-blue-600 dark:bg-blue-500 h-3 rounded-t-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col -space-y-1">
+                <span className="text-xl font-bold bg-gradient-to-r from-violet-700 via-indigo-700 to-blue-700 dark:from-violet-300 dark:via-indigo-300 dark:to-blue-300 bg-clip-text text-transparent tracking-tight">
+                  Tracklet
+                </span>
+                <span className="text-[9px] font-medium text-gray-500 dark:text-gray-400 tracking-widest uppercase ml-0.5">
+                  Money Mind
+                </span>
+              </div>
             </Link>
             {isHomePage && (
               <p className="text-sm text-slate-400 dark:text-gray-400 max-w-xs">

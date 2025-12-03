@@ -90,22 +90,28 @@ const Header = () => {
     <header className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-800">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <Image
-            src="/logo-light.png"
-            alt="Tracklet Logo"
-            width={200}
-            height={80}
-            className="h-12 w-auto object-contain block dark:hidden"
-            priority
-          />
-          <Image
-            src="/logo-dark.png"
-            alt="Tracklet Logo"
-            width={200}
-            height={80}
-            className="h-12 w-auto object-contain hidden dark:block"
-            priority
-          />
+          <div className="flex flex-col items-center justify-center">
+            {/* Bar Chart Icon */}
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-blue-600 rounded-lg blur opacity-25 dark:opacity-50"></div>
+              <div className="relative bg-white dark:bg-gray-950 rounded-lg p-1 border border-violet-100 dark:border-violet-900/50">
+                <div className="flex items-end gap-0.5 h-6 w-6">
+                  <div className="w-1 bg-violet-500 dark:bg-violet-400 h-2 rounded-t-sm"></div>
+                  <div className="w-1 bg-violet-600 dark:bg-violet-500 h-3 rounded-t-sm"></div>
+                  <div className="w-1 bg-indigo-600 dark:bg-indigo-500 h-5 rounded-t-sm"></div>
+                  <div className="w-1 bg-blue-600 dark:bg-blue-500 h-4 rounded-t-sm"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col -space-y-1">
+            <span className="text-2xl font-bold bg-gradient-to-r from-violet-700 via-indigo-700 to-blue-700 dark:from-violet-300 dark:via-indigo-300 dark:to-blue-300 bg-clip-text text-transparent tracking-tight">
+              Tracklet
+            </span>
+            <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 tracking-widest uppercase ml-0.5">
+              Money Mind
+            </span>
+          </div>
         </Link>
 
         {/* Navigation Links - Different for signed in/out users */}

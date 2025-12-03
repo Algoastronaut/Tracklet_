@@ -90,8 +90,8 @@ const Header = () => {
     <header className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-800">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
-            <span className="text-white font-bold text-xl">T</span>
+          <div className="flex items-center justify-center">
+            <Image src="/logo-sm.png" alt="Tracklet Logo" width={40} height={40} className="h-10 w-10 object-contain" />
           </div>
           <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-blue-600 dark:from-violet-400 dark:to-blue-400 bg-clip-text text-transparent tracking-tight">
             Tracklet

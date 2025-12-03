@@ -36,10 +36,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex items-center justify-center">
-                <Image src="/logo-sm.png" alt="Tracklet Logo" width={32} height={32} className="h-8 w-8 object-contain" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-blue-600 dark:from-violet-400 dark:to-blue-400 bg-clip-text text-transparent tracking-tight">
+              <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 via-indigo-500 to-blue-600 dark:from-violet-400 dark:via-indigo-400 dark:to-blue-400 bg-clip-text text-transparent tracking-tighter">
                 Tracklet
               </span>
             </Link>

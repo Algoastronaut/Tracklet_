@@ -90,9 +90,22 @@ const Header = () => {
     <header className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-gray-800">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-3xl font-bold bg-gradient-to-r from-violet-600 via-indigo-500 to-blue-600 dark:from-violet-400 dark:via-indigo-400 dark:to-blue-400 bg-clip-text text-transparent tracking-tighter hover:opacity-90 transition-opacity cursor-pointer">
-            Tracklet
-          </span>
+          <Image
+            src="/logo-light.png"
+            alt="Tracklet Logo"
+            width={200}
+            height={80}
+            className="h-12 w-auto object-contain block dark:hidden"
+            priority
+          />
+          <Image
+            src="/logo-dark.png"
+            alt="Tracklet Logo"
+            width={200}
+            height={80}
+            className="h-12 w-auto object-contain hidden dark:block"
+            priority
+          />
         </Link>
 
         {/* Navigation Links - Different for signed in/out users */}

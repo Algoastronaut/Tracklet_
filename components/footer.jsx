@@ -36,9 +36,20 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 via-indigo-500 to-blue-600 dark:from-violet-400 dark:via-indigo-400 dark:to-blue-400 bg-clip-text text-transparent tracking-tighter">
-                Tracklet
-              </span>
+              <Image
+                src="/logo-light.png"
+                alt="Tracklet Logo"
+                width={160}
+                height={60}
+                className="h-10 w-auto object-contain block dark:hidden"
+              />
+              <Image
+                src="/logo-dark.png"
+                alt="Tracklet Logo"
+                width={160}
+                height={60}
+                className="h-10 w-auto object-contain hidden dark:block"
+              />
             </Link>
             {isHomePage && (
               <p className="text-sm text-slate-400 dark:text-gray-400 max-w-xs">

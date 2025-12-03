@@ -16,6 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { updateBudget } from "@/actions/budget";
+import NumberTicker from "@/components/magicui/number-ticker";
 
 export function BudgetProgress({ initialBudget, currentExpenses }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -109,12 +110,18 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
               </div>
             ) : (
               <>
-                <CardDescription className="text-sm text-gray-600 dark:text-gray-400">
-                  {activeBudget
-                    ? `$${currentExpenses.toFixed(
-                      2
-                    )} of $${activeBudget.amount.toFixed(2)} spent`
-                    : "No budget set"}
+                <CardDescription className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                  {activeBudget ? (
+                    <>
+                      <span>$</span>
+                      <NumberTicker value={currentExpenses} decimalPlaces={2} />
+                      <span>of $</span>
+                      <NumberTicker value={activeBudget.amount} decimalPlaces={2} />
+                      <span>spent</span>
+                    </>
+                  ) : (
+                    "No budget set"
+                  )}
                 </CardDescription>
                 <Button
                   variant="ghost"
@@ -135,10 +142,10 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
             <Progress
               value={percentUsed}
               extraStyles={`${percentUsed >= 90
-                  ? "bg-red-500"
-                  : percentUsed >= 75
-                    ? "bg-yellow-500"
-                    : "bg-emerald-500"
+                ? "bg-red-500"
+                : percentUsed >= 75
+                  ? "bg-yellow-500"
+                  : "bg-emerald-500"
                 }`}
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 text-right font-medium">
